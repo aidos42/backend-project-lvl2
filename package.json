@@ -1,0 +1,29 @@
+{
+  "name": "@hexlet/code",
+  "version": "0.0.1",
+  "description": "Second learning project from the Hexlet's course",
+  "bin": {
+    "hexlet": "bin/gendiff.js"
+  },
+  "engines": {
+    "node": ">=14"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aidos42/backend-project-lvl2.git"
+  },
+  "author": "Aidos",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/aidos42/backend-project-lvl2/issues"
+  },
+  "type": "module",
+  "homepage": "https://github.com/aidos42/backend-project-lvl2#readme",
+  "dependencies": {
+    "commander": "^7.2.0"
+  }
+}
