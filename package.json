@@ -5,11 +5,8 @@
   "bin": {
     "hexlet": "bin/gendiff.js"
   },
-  "engines": {
-    "node": ">=14"
-  },
   "scripts": {
-    "test": "npx jest --bail"
+    "test": "npx jest"
   },
   "main": "bin/gendiff.js",
   "repository": {
@@ -24,8 +21,7 @@
   "type": "module",
   "jest": {
     "testEnvironment": "node",
-    "transform": {},
-    "testRunner": "jest-circus/runner"
+    "transform": {}
   },
   "homepage": "https://github.com/aidos42/backend-project-lvl2#readme",
   "dependencies": {

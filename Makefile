@@ -3,6 +3,6 @@ install:
 lint:
 	npx eslint .
 test:
-	npm test
+	node --experimental-vm-modules node_modules/.bin/jest
 
 .PHONY: test
