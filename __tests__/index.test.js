@@ -21,3 +21,17 @@ test('source file is not empty file, target is empty', () => {
   const expectedAnswer = '{\n- follow: false\n- host: hexlet.io\n- proxy: 123.234.53.22\n- timeout: 50\n}';
   expect(gendiff(path1, path2)).toBe(expectedAnswer);
 });
+
+test('source file is empty file, target is not empty', () => {
+  const path1 = getFixturePath('file3.json');
+  const path2 = getFixturePath('file1.json');
+  const expectedAnswer = '{\n+ follow: false\n+ host: hexlet.io\n+ proxy: 123.234.53.22\n+ timeout: 50\n}';
+  expect(gendiff(path1, path2)).toBe(expectedAnswer);
+});
+
+test('source file is empty file, target is also empty', () => {
+  const path1 = getFixturePath('file3.json');
+  const path2 = getFixturePath('file3.json');
+  const expectedAnswer = '{\n\n}';
+  expect(gendiff(path1, path2)).toBe(expectedAnswer);
+});
