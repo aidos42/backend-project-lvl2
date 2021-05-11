@@ -4,6 +4,4 @@
 ![Lint-test](https://github.com/aidos42/backend-project-lvl2/workflows/lint-test/badge.svg)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e3e84cefad4ed4eef913/test_coverage)](https://codeclimate.com/github/aidos42/backend-project-lvl2/test_coverage)
 
-[![asciicast](https://asciinema.org/a/fL4rPOXjwKQ1MJcXgvl86igbY.svg)](https://asciinema.org/a/fL4rPOXjwKQ1MJcXgvl86igbY)
-
-[![asciicast](https://asciinema.org/a/fkhJB8x5aGifCbiXkc8hy21lr.svg)](https://asciinema.org/a/fkhJB8x5aGifCbiXkc8hy21lr)
+[![asciicast](https://asciinema.org/a/za1NdoIJICfSXsHSXqU1bg8Ll.svg)](https://asciinema.org/a/za1NdoIJICfSXsHSXqU1bg8Ll)
