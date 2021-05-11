@@ -16,6 +16,3 @@ group2:
   abc: 12345
   deep:
     id: 45
-boolean:
-  'true': 'false'
-  'false': 'true'

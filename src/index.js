@@ -11,9 +11,7 @@ export default (path1, path2) => {
 
   const diff = getDiff(file1, file2);
 
-  console.log(diff);
-
   const result = makeStylish(diff);
-
+  console.log(result);
   return result;
 };
