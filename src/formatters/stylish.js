@@ -21,7 +21,7 @@ const getFormattedValue = (currentValue, depth) => {
   return `{\n${line.join('\n')}\n${getIndent(depth)}}`;
 };
 
-const stylish = (diff) => {
+const makeStylish = (diff) => {
   const iter = (currentDiff, depth) => {
     const line = currentDiff.flatMap((el) => {
       switch (el.status) {
@@ -36,15 +36,17 @@ const stylish = (diff) => {
             `${getIndent(depth, '-')}${el.key}: ${getFormattedValue(el.valueOld, depth)}`,
             `${getIndent(depth, '+')}${el.key}: ${getFormattedValue(el.valueNew, depth)}`,
           ];
-        default:
+        case 'unchanged':
           return `${getIndent(depth)}${el.key}: ${getFormattedValue(el.value, depth)}`;
+        default:
+          throw new Error(`Unexpected property: ${el.key}`);
       }
     });
     return `{\n${line.join('\n')}\n${getIndent(depth - 2)}}`;
   };
 
   const result = iter(diff, 1);
-  return result.concat('\n');
+  return result;
 };
 
-export default stylish;
+export default makeStylish;

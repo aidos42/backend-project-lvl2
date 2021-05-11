@@ -9,18 +9,30 @@ const __dirname = dirname(__filename);
 
 const getFixturePath = (filename) => path.join(__dirname, '..', '__fixtures__', filename);
 const expectedStylishAnswer = fs.readFileSync(getFixturePath('stylish.txt'), 'utf-8');
-describe('json', () => {
-  test('two not empty files', () => {
+const expectedPlainAnswer = fs.readFileSync(getFixturePath('plain.txt'), 'utf-8');
+
+describe('format stylish', () => {
+  test('two not empty json files', () => {
     const path1 = getFixturePath('file1.json');
     const path2 = getFixturePath('file2.json');
     expect(gendiff(path1, path2)).toBe(expectedStylishAnswer);
   });
-});
-
-describe('yaml', () => {
-  test('two not empty files', () => {
+  test('two not empty yaml files', () => {
     const path1 = getFixturePath('file1.yml');
     const path2 = getFixturePath('file2.yml');
     expect(gendiff(path1, path2)).toBe(expectedStylishAnswer);
+  });
+});
+
+describe('format plain', () => {
+  test('two not empty json files', () => {
+    const path1 = getFixturePath('file1.json');
+    const path2 = getFixturePath('file2.json');
+    expect(gendiff(path1, path2, 'plain')).toBe(expectedPlainAnswer);
+  });
+  test('two not empty yaml files', () => {
+    const path1 = getFixturePath('file1.yml');
+    const path2 = getFixturePath('file2.yml');
+    expect(gendiff(path1, path2, 'plain')).toBe(expectedPlainAnswer);
   });
 });

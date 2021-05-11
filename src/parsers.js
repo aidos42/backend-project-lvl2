@@ -1,7 +1,7 @@
 import yaml from 'js-yaml';
 import * as path from 'path';
 
-export default (file, filePath) => {
+const parse = (file, filePath) => {
   const format = path.extname(filePath);
   if (format === '.json') {
     return JSON.parse(file);
@@ -14,3 +14,5 @@ export default (file, filePath) => {
 
   return result;
 };
+
+export default parse;
