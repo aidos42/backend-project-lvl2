@@ -12,5 +12,6 @@ export default (path1, path2, formatter = 'stylish') => {
   const diff = getDiff(file1, file2);
 
   const result = formatDiff(formatter, diff);
+
   return result;
 };

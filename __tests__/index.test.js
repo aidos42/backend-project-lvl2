@@ -13,15 +13,20 @@ const expectedPlainAnswer = fs.readFileSync(getFixturePath('plain.txt'), 'utf-8'
 const expectedJsonAnswer = fs.readFileSync(getFixturePath('json.txt'), 'utf-8');
 
 describe('format stylish', () => {
-  test('two not empty json files', () => {
+  test('default option', () => {
     const path1 = getFixturePath('file1.json');
     const path2 = getFixturePath('file2.json');
     expect(gendiff(path1, path2)).toBe(expectedStylishAnswer);
   });
+  test('two not empty json files', () => {
+    const path1 = getFixturePath('file1.json');
+    const path2 = getFixturePath('file2.json');
+    expect(gendiff(path1, path2, 'stylish')).toBe(expectedStylishAnswer);
+  });
   test('two not empty yaml files', () => {
     const path1 = getFixturePath('file1.yml');
     const path2 = getFixturePath('file2.yml');
-    expect(gendiff(path1, path2)).toBe(expectedStylishAnswer);
+    expect(gendiff(path1, path2, 'stylish')).toBe(expectedStylishAnswer);
   });
 });
 

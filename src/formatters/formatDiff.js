@@ -7,8 +7,10 @@ const formatDiff = (formatter, diff) => {
       return makePlain(diff);
     case 'stylish':
       return makeStylish(diff);
-    default:
+    case 'json':
       return JSON.stringify(diff);
+    default:
+      throw new Error(`Unexpected format: ${formatter}`);
   }
 };
 

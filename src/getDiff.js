@@ -9,16 +9,17 @@ const getDiff = (data1, data2) => {
       return { key, status: 'added', value: data2[key] };
     }
     if (!_.has(data2, key)) {
-      return { key, status: 'deleted', value: data1[key] };
+      return { key, status: 'removed', value: data1[key] };
     }
     if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-      return { key, status: 'nested', children: getDiff(data1[key], data2[key]) };
+      return { key, status: 'complex value', children: getDiff(data1[key], data2[key]) };
     }
     if (!_.isEqual(data1[key], data2[key])) {
       return {
-        key, status: 'changed', valueOld: data1[key], valueNew: data2[key],
+        key, status: 'updated', valueOld: data1[key], valueNew: data2[key],
       };
     }
+
     return { key, status: 'unchanged', value: data1[key] };
   });
 

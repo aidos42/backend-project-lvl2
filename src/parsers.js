@@ -7,12 +7,16 @@ const parse = (file, filePath) => {
     return JSON.parse(file);
   }
 
-  const result = yaml.load(file);
-  if (result === undefined) {
-    return {};
+  if (format === '.yaml' || format === '.yml') {
+    const result = yaml.load(file);
+    if (result === undefined) {
+      return {};
+    }
+
+    return result;
   }
 
-  return result;
+  throw new Error(`Unexpected format: ${format}`);
 };
 
 export default parse;

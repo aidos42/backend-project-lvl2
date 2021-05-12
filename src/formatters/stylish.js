@@ -25,13 +25,13 @@ const makeStylish = (diff) => {
   const iter = (currentDiff, depth) => {
     const line = currentDiff.flatMap((el) => {
       switch (el.status) {
-        case 'nested':
+        case 'complex value':
           return `${getIndent(depth)}${el.key}: ${iter(el.children, depth + 2)}`;
         case 'added':
           return `${getIndent(depth, '+')}${el.key}: ${getFormattedValue(el.value, depth)}`;
-        case 'deleted':
+        case 'removed':
           return `${getIndent(depth, '-')}${el.key}: ${getFormattedValue(el.value, depth)}`;
-        case 'changed':
+        case 'updated':
           return [
             `${getIndent(depth, '-')}${el.key}: ${getFormattedValue(el.valueOld, depth)}`,
             `${getIndent(depth, '+')}${el.key}: ${getFormattedValue(el.valueNew, depth)}`,
@@ -42,10 +42,12 @@ const makeStylish = (diff) => {
           throw new Error(`Unexpected property: ${el.key}`);
       }
     });
+
     return `{\n${line.join('\n')}\n${getIndent(depth - 2)}}`;
   };
 
   const result = iter(diff, 1);
+
   return result;
 };
 

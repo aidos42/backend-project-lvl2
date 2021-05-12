@@ -8,6 +8,7 @@ const getFormattedValue = (value) => {
   if (_.isPlainObject(value)) {
     return '[complex value]';
   }
+
   return value;
 };
 
@@ -16,13 +17,13 @@ const makePlain = (diff) => {
     const line = currentDiff.flatMap((el) => {
       const newPath = [...path, el.key];
       switch (el.status) {
-        case 'nested':
+        case 'complex value':
           return iter(el.children, newPath);
         case 'added':
           return `Property '${getName(newPath)}' was added with value: ${getFormattedValue(el.value)}`;
-        case 'deleted':
+        case 'removed':
           return `Property '${getName(newPath)}' was removed`;
-        case 'changed':
+        case 'updated':
           return `Property '${getName(newPath)}' was updated. From ${getFormattedValue(el.valueOld)} to ${getFormattedValue(el.valueNew)}`;
         case 'unchanged':
           return [];
@@ -30,9 +31,12 @@ const makePlain = (diff) => {
           throw new Error(`Unexpected property: ${el.key}`);
       }
     });
+
     return line.join('\n');
   };
+
   const result = iter(diff, []);
+
   return result;
 };
 
