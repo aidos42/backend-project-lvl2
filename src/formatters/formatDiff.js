@@ -5,8 +5,10 @@ const formatDiff = (formatter, diff) => {
   switch (formatter) {
     case 'plain':
       return makePlain(diff);
-    default:
+    case 'stylish':
       return makeStylish(diff);
+    default:
+      return JSON.stringify(diff);
   }
 };
 
