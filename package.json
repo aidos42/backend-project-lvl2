@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Second learning project from the Hexlet's course",
   "bin": {
-    "hexlet": "bin/gendiff.js"
+    "gendiff": "bin/gendiff.js"
   },
   "scripts": {
     "test": "npx jest --bail"
