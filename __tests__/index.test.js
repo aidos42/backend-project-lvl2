@@ -1,5 +1,4 @@
 import * as fs from 'fs';
-import { describe } from 'jest-circus';
 import path, { dirname } from 'path';
 import { fileURLToPath } from 'url';
 import gendiff from '../src/index.js';
