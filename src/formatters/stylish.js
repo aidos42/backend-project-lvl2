@@ -21,7 +21,7 @@ const getFormattedValue = (currentValue, depth) => {
   return `{\n${line.join('\n')}\n${getIndent(depth)}}`;
 };
 
-const makeStylish = (diff) => {
+export default (diff) => {
   const iter = (currentDiff, depth) => {
     const line = currentDiff.flatMap((el) => {
       switch (el.status) {
@@ -46,9 +46,5 @@ const makeStylish = (diff) => {
     return `{\n${line.join('\n')}\n${getIndent(depth - 2)}}`;
   };
 
-  const result = iter(diff, 1);
-
-  return result;
+  return iter(diff, 1);
 };
-
-export default makeStylish;

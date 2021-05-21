@@ -9,5 +9,5 @@ program
   .arguments('<path1> <path2>')
   .action((path1, path2, options) => {
     console.log(gendiff(path1, path2, options.format));
-  });
-program.parse(process.argv);
+  })
+  .parse(process.argv);

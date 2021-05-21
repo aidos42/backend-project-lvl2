@@ -1,22 +1,15 @@
 import yaml from 'js-yaml';
-import * as path from 'path';
 
-const parse = (file, filePath) => {
-  const format = path.extname(filePath);
-  if (format === '.json') {
-    return JSON.parse(file);
+export default (file, extension) => {
+  const formats = {
+    '.json': JSON.parse,
+    '.yaml': yaml.load,
+    '.yml': yaml.load,
+  };
+
+  try {
+    return formats[extension](file);
+  } catch (e) {
+    throw new Error(`Unexpected extension: ${extension}`);
   }
-
-  if (format === '.yaml' || format === '.yml') {
-    const result = yaml.load(file);
-    if (result === undefined) {
-      return {};
-    }
-
-    return result;
-  }
-
-  throw new Error(`Unexpected format: ${format}`);
 };
-
-export default parse;

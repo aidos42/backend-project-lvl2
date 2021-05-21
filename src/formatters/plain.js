@@ -12,7 +12,7 @@ const getFormattedValue = (value) => {
   return value;
 };
 
-const makePlain = (diff) => {
+export default (diff) => {
   const iter = (currentDiff, path) => {
     const line = currentDiff.flatMap((el) => {
       const newPath = [...path, el.key];
@@ -35,9 +35,5 @@ const makePlain = (diff) => {
     return line.join('\n');
   };
 
-  const result = iter(diff, []);
-
-  return result;
+  return iter(diff, []);
 };
-
-export default makePlain;
