@@ -5,7 +5,7 @@ export default (incomingData1, incomingData2) => {
     const rawDataKeys = _.union(Object.keys(data1), Object.keys(data2));
     const sortedDataKeys = _.sortBy(rawDataKeys);
 
-    const result = sortedDataKeys.map((key) => {
+    return sortedDataKeys.map((key) => {
       if (!_.has(data1, key)) {
         return { key, status: 'added', value: data2[key] };
       }
@@ -23,8 +23,6 @@ export default (incomingData1, incomingData2) => {
 
       return { key, status: 'unchanged', value: data1[key] };
     });
-
-    return result;
   };
 
   return iter(incomingData1, incomingData2);
