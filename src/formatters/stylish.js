@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { types } from '../buildDiff.js';
 
-const spacesCount = 2;
+const spacesCount = 4;
 
-const getIndent = (depth) => ' '.repeat(depth * spacesCount);
+const getIndent = (depth) => ' '.repeat((depth * spacesCount) - 2);
 const getSign = (sign = ' ') => `${sign} `;
 const getPrefix = (depth, sign) => {
-  if (depth <= 0) {
+  if (depth === 0) {
     return '';
   }
 
@@ -21,7 +21,7 @@ const stringify = (value, depth) => {
   }
 
   const line = Object.entries(value)
-    .map(([key, currentValue]) => `${getPrefix(depth + 2)}${key}: ${stringify(currentValue, depth + 2)}`);
+    .map(([key, currentValue]) => `${getPrefix(depth + 1)}${key}: ${stringify(currentValue, depth + 1)}`);
 
   return placeBrackets(line, depth);
 };
@@ -31,7 +31,7 @@ export default (diff) => {
     const lines = currentDiff.flatMap((el) => {
       switch (el.type) {
         case types.NESTED:
-          return `${getPrefix(depth)}${el.key}: ${iter(el.children, depth + 2)}`;
+          return `${getPrefix(depth)}${el.key}: ${iter(el.children, depth + 1)}`;
         case types.ADDED:
           return `${getPrefix(depth, '+')}${el.key}: ${stringify(el.value, depth)}`;
         case types.REMOVED:
@@ -48,7 +48,7 @@ export default (diff) => {
       }
     });
 
-    return placeBrackets(lines, depth - 2);
+    return placeBrackets(lines, depth - 1);
   };
   return iter(diff, 1);
 };
