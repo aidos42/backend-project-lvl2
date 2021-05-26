@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { types } from '../buildDiff.js';
 
 const getName = (path) => path.join('.');
 const getFormattedValue = (value) => {
@@ -16,19 +17,19 @@ export default (diff) => {
   const iter = (currentDiff, path) => {
     const line = currentDiff.flatMap((el) => {
       const newPath = [...path, el.key];
-      switch (el.status) {
-        case 'complex value':
+      switch (el.type) {
+        case types.NESTED:
           return iter(el.children, newPath);
-        case 'added':
+        case types.ADDED:
           return `Property '${getName(newPath)}' was added with value: ${getFormattedValue(el.value)}`;
-        case 'removed':
+        case types.REMOVED:
           return `Property '${getName(newPath)}' was removed`;
-        case 'updated':
-          return `Property '${getName(newPath)}' was updated. From ${getFormattedValue(el.valueOld)} to ${getFormattedValue(el.valueNew)}`;
-        case 'unchanged':
+        case types.UPDATED:
+          return `Property '${getName(newPath)}' was updated. From ${getFormattedValue(el.value.previous)} to ${getFormattedValue(el.value.current)}`;
+        case types.UNCHANGED:
           return [];
         default:
-          throw new Error(`Unexpected property: ${el.key}`);
+          throw new Error(`Unexpected property: ${el.type}`);
       }
     });
 

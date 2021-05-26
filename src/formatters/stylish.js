@@ -1,50 +1,54 @@
 import _ from 'lodash';
+import { types } from '../buildDiff.js';
 
 const spacesCount = 2;
 
-const getIndent = (depth, sign = ' ') => {
+const getIndent = (depth) => ' '.repeat(depth * spacesCount);
+const getSign = (sign = ' ') => `${sign} `;
+const getPrefix = (depth, sign) => {
   if (depth <= 0) {
     return '';
   }
 
-  return ' '.repeat(depth * spacesCount).concat(`${sign} `);
+  return `${getIndent(depth)}${getSign(sign)}`;
 };
 
-const getFormattedValue = (currentValue, depth) => {
-  if (!_.isPlainObject(currentValue)) {
-    return currentValue;
+const placeBrackets = (lines, depth) => `{\n${lines.join('\n')}\n${getPrefix(depth)}}`;
+
+const stringify = (value, depth) => {
+  if (!_.isPlainObject(value)) {
+    return value;
   }
 
-  const line = Object.entries(currentValue)
-    .map(([key, value]) => `${getIndent(depth + 2)}${key}: ${getFormattedValue(value, depth + 2)}`);
+  const line = Object.entries(value)
+    .map(([key, currentValue]) => `${getPrefix(depth + 2)}${key}: ${stringify(currentValue, depth + 2)}`);
 
-  return `{\n${line.join('\n')}\n${getIndent(depth)}}`;
+  return placeBrackets(line, depth);
 };
 
 export default (diff) => {
   const iter = (currentDiff, depth) => {
-    const line = currentDiff.flatMap((el) => {
-      switch (el.status) {
-        case 'complex value':
-          return `${getIndent(depth)}${el.key}: ${iter(el.children, depth + 2)}`;
-        case 'added':
-          return `${getIndent(depth, '+')}${el.key}: ${getFormattedValue(el.value, depth)}`;
-        case 'removed':
-          return `${getIndent(depth, '-')}${el.key}: ${getFormattedValue(el.value, depth)}`;
-        case 'updated':
+    const lines = currentDiff.flatMap((el) => {
+      switch (el.type) {
+        case types.NESTED:
+          return `${getPrefix(depth)}${el.key}: ${iter(el.children, depth + 2)}`;
+        case types.ADDED:
+          return `${getPrefix(depth, '+')}${el.key}: ${stringify(el.value, depth)}`;
+        case types.REMOVED:
+          return `${getPrefix(depth, '-')}${el.key}: ${stringify(el.value, depth)}`;
+        case types.UPDATED:
           return [
-            `${getIndent(depth, '-')}${el.key}: ${getFormattedValue(el.valueOld, depth)}`,
-            `${getIndent(depth, '+')}${el.key}: ${getFormattedValue(el.valueNew, depth)}`,
+            `${getPrefix(depth, '-')}${el.key}: ${stringify(el.value.previous, depth)}`,
+            `${getPrefix(depth, '+')}${el.key}: ${stringify(el.value.current, depth)}`,
           ];
-        case 'unchanged':
-          return `${getIndent(depth)}${el.key}: ${getFormattedValue(el.value, depth)}`;
+        case types.UNCHANGED:
+          return `${getPrefix(depth)}${el.key}: ${stringify(el.value, depth)}`;
         default:
           throw new Error(`Unexpected property: ${el.key}`);
       }
     });
 
-    return `{\n${line.join('\n')}\n${getIndent(depth - 2)}}`;
+    return placeBrackets(lines, depth - 2);
   };
-
   return iter(diff, 1);
 };

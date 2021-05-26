@@ -1,29 +1,40 @@
 import _ from 'lodash';
 
-export default (incomingData1, incomingData2) => {
-  const iter = (data1, data2) => {
-    const rawDataKeys = _.union(Object.keys(data1), Object.keys(data2));
-    const sortedDataKeys = _.sortBy(rawDataKeys);
+export const types = {
+  ADDED: 'added',
+  REMOVED: 'removed',
+  UPDATED: 'updated',
+  UNCHANGED: 'unchanged',
+  NESTED: 'nested',
+};
 
-    return sortedDataKeys.map((key) => {
-      if (!_.has(data1, key)) {
-        return { key, status: 'added', value: data2[key] };
+export const buildDiff = (data1, data2) => {
+  const iter = (innerData1, innerData2) => {
+    const unitedKeys = _.union(Object.keys(innerData1), Object.keys(innerData2));
+    const sortedKeys = _.sortBy(unitedKeys);
+
+    return sortedKeys.map((key) => {
+      if (!_.has(innerData1, key)) {
+        return { key, type: types.ADDED, value: innerData2[key] };
       }
-      if (!_.has(data2, key)) {
-        return { key, status: 'removed', value: data1[key] };
+
+      if (!_.has(innerData2, key)) {
+        return { key, type: types.REMOVED, value: innerData1[key] };
       }
-      if (_.isPlainObject(data1[key]) && _.isPlainObject(data2[key])) {
-        return { key, status: 'complex value', children: iter(data1[key], data2[key]) };
+
+      if (_.isPlainObject(innerData1[key]) && _.isPlainObject(innerData2[key])) {
+        return { key, type: types.NESTED, children: iter(innerData1[key], innerData2[key]) };
       }
-      if (!_.isEqual(data1[key], data2[key])) {
+
+      if (!_.isEqual(innerData1[key], innerData2[key])) {
         return {
-          key, status: 'updated', valueOld: data1[key], valueNew: data2[key],
+          key, type: types.UPDATED, value: { previous: innerData1[key], current: innerData2[key] },
         };
       }
 
-      return { key, status: 'unchanged', value: data1[key] };
+      return { key, type: types.UNCHANGED, value: innerData1[key] };
     });
   };
 
-  return iter(incomingData1, incomingData2);
+  return iter(data1, data2);
 };
