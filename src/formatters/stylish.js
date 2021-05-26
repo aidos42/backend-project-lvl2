@@ -50,5 +50,6 @@ export default (diff) => {
 
     return placeBrackets(lines, depth - 1);
   };
+
   return iter(diff, 1);
 };

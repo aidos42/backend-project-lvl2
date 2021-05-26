@@ -15,7 +15,7 @@ const getFormattedValue = (value) => {
 
 export default (diff) => {
   const iter = (currentDiff, path) => {
-    const line = currentDiff.flatMap((el) => {
+    const lines = currentDiff.flatMap((el) => {
       const newPath = [...path, el.key];
       switch (el.type) {
         case types.NESTED:
@@ -33,7 +33,7 @@ export default (diff) => {
       }
     });
 
-    return line.join('\n');
+    return lines.join('\n');
   };
 
   return iter(diff, []);
