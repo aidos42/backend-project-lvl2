@@ -3,25 +3,19 @@ import { types } from '../buildDiff.js';
 
 const spacesCount = 4;
 
-const getIndent = (depth) => ' '.repeat((depth * spacesCount) - 2);
-const getSign = (sign = ' ') => `${sign} `;
-const getPrefix = (depth, sign) => {
-  if (depth === 0) {
-    return '';
-  }
+const getIndent = (depth) => ' '.repeat(depth);
 
-  return `${getIndent(depth)}${getSign(sign)}`;
-};
-
-const placeBrackets = (lines, depth) => `{\n${lines.join('\n')}\n${getPrefix(depth)}}`;
+const placeBrackets = (lines, depth) => `{\n${lines.join('\n')}\n${getIndent(depth)}}`;
 
 const stringify = (value, depth) => {
   if (!_.isPlainObject(value)) {
     return value;
   }
 
+  const innerDepth = depth + spacesCount;
+
   const line = Object.entries(value)
-    .map(([key, currentValue]) => `${getPrefix(depth + 1)}${key}: ${stringify(currentValue, depth + 1)}`);
+    .map(([key, currentValue]) => `${getIndent(innerDepth)}${key}: ${stringify(currentValue, innerDepth)}`);
 
   return placeBrackets(line, depth);
 };
@@ -31,25 +25,25 @@ export default (diff) => {
     const lines = currentDiff.flatMap((el) => {
       switch (el.type) {
         case types.NESTED:
-          return `${getPrefix(depth)}${el.key}: ${iter(el.children, depth + 1)}`;
+          return `${getIndent(depth)}    ${el.key}: ${iter(el.children, depth + spacesCount)}`;
         case types.ADDED:
-          return `${getPrefix(depth, '+')}${el.key}: ${stringify(el.value, depth)}`;
+          return `${getIndent(depth)}  + ${el.key}: ${stringify(el.value, depth + spacesCount)}`;
         case types.REMOVED:
-          return `${getPrefix(depth, '-')}${el.key}: ${stringify(el.value, depth)}`;
+          return `${getIndent(depth)}  - ${el.key}: ${stringify(el.value, depth + spacesCount)}`;
         case types.UPDATED:
           return [
-            `${getPrefix(depth, '-')}${el.key}: ${stringify(el.value.previous, depth)}`,
-            `${getPrefix(depth, '+')}${el.key}: ${stringify(el.value.current, depth)}`,
+            `${getIndent(depth)}  - ${el.key}: ${stringify(el.value.previous, depth + spacesCount)}`,
+            `${getIndent(depth)}  + ${el.key}: ${stringify(el.value.current, depth + spacesCount)}`,
           ];
         case types.UNCHANGED:
-          return `${getPrefix(depth)}${el.key}: ${stringify(el.value, depth)}`;
+          return `${getIndent(depth)}    ${el.key}: ${stringify(el.value, depth + spacesCount)}`;
         default:
-          throw new Error(`Unexpected property: ${el.key}`);
+          throw new Error(`Unexpected type of property: ${el.key}`);
       }
     });
 
-    return placeBrackets(lines, depth - 1);
+    return placeBrackets(lines, depth);
   };
 
-  return iter(diff, 1);
+  return iter(diff, 0);
 };
