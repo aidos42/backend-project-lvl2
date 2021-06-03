@@ -32,8 +32,8 @@ export default (diff) => {
           return `${getIndent(depth)}  - ${el.key}: ${stringify(el.value, depth + spacesCount)}`;
         case types.UPDATED:
           return [
-            `${getIndent(depth)}  - ${el.key}: ${stringify(el.value.previous, depth + spacesCount)}`,
-            `${getIndent(depth)}  + ${el.key}: ${stringify(el.value.current, depth + spacesCount)}`,
+            `${getIndent(depth)}  - ${el.key}: ${stringify(el.value1, depth + spacesCount)}`,
+            `${getIndent(depth)}  + ${el.key}: ${stringify(el.value2, depth + spacesCount)}`,
           ];
         case types.UNCHANGED:
           return `${getIndent(depth)}    ${el.key}: ${stringify(el.value, depth + spacesCount)}`;

@@ -28,7 +28,7 @@ export const buildDiff = (data1, data2) => {
 
       if (!_.isEqual(innerData1[key], innerData2[key])) {
         return {
-          key, type: types.UPDATED, value: { previous: innerData1[key], current: innerData2[key] },
+          key, type: types.UPDATED, value1: innerData1[key], value2: innerData2[key],
         };
       }
 

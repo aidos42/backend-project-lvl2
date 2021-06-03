@@ -25,7 +25,7 @@ export default (diff) => {
         case types.REMOVED:
           return `Property '${stringifyPath(newPath)}' was removed`;
         case types.UPDATED:
-          return `Property '${stringifyPath(newPath)}' was updated. From ${stringifyValue(el.value.previous)} to ${stringifyValue(el.value.current)}`;
+          return `Property '${stringifyPath(newPath)}' was updated. From ${stringifyValue(el.value1)} to ${stringifyValue(el.value2)}`;
         case types.UNCHANGED:
           return [];
         default:
